@@ -1,42 +1,39 @@
 #include <stdio.h>
-#define INF 999
+#define INF 999  
 
-int min(int a, int b) {
-    return (a < b) ? a : b;
-}
-
-void floyd(int n, int d[10][10]) {
-    for (int k = 1; k <= n; k++) {
-        for (int i = 1; i <= n; i++) {
-            for (int j = 1; j <= n; j++) {
-                d[i][j] = min(d[i][j], d[i][k] + d[k][j]);
-            }
-        }
-    }
+void floydWarshall(int n, int graph[10][10]) {
+    int i, j, k;
+    for (k = 0; k < n; k++)       
+        for (i = 0; i < n; i++)   
+            for (j = 0; j < n; j++) 
+                if (graph[i][k] + graph[k][j] < graph[i][j])
+                    graph[i][j] = graph[i][k] + graph[k][j];
 }
 
 int main() {
-    int n, a[10][10];
-    
-    printf("Enter the number of nodes: ");
+    int n, i, j;
+    int graph[10][10];
+
+    printf("Enter number of nodes: ");
     scanf("%d", &n);
-    
-    printf("\nEnter the adjacency matrix:\n");
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            scanf("%d", &a[i][j]);
-        }
-    }
-    
-    floyd(n, a);
-    
-    printf("\nThe all-pairs shortest distance matrix is:\n");
-    for (int i = 1; i <= n; i++) {
-        for (int j = 1; j <= n; j++) {
-            printf("%5d", a[i][j]);
+
+    printf("Enter the adjacency matrix (use %d for INF):\n", INF);
+    for (i = 0; i < n; i++)
+        for (j = 0; j < n; j++)
+            scanf("%d", &graph[i][j]);
+
+    floydWarshall(n, graph);
+
+    printf("\nAll-pairs shortest distance matrix:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (graph[i][j] == INF)
+                printf(" INF ");
+            else
+                printf("%4d ", graph[i][j]);
         }
         printf("\n");
     }
-    
+
     return 0;
 }
